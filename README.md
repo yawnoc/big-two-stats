@@ -25,17 +25,19 @@ A loss of 13 cards is always tripled.
 
 Regular players are those who have played at least 1 in 4 games.
 
-## Specifications for `{scores file}.txt`
+## Specifications for scores text file
 
-1. Hash (`#`) comments out the remainder of a line
-2. Date is specified by a line of digits `{yyyymmdd}`
+1. Hash (`#`) **comments** out the remainder of a line
+2. **Date** is specified by a line of digits `{yyyymmdd}`
    1. Extra digits are permitted but ignored
-3. Players are specified by a line `{P1} {P2} {P3} {P4}`
+3. **Players** are specified by a line `{P1} {P2} {P3} {P4}`
    1. Whitespace can be any non-newline whitespace
    2. Player names cannot begin with a digit
    3. Player names cannot contain whitespace
    4. Player names cannot contain commas
-4. Losses are specified by a line `{L1} {L2} {L3} {L4}`
+   5. Player names cannot contain asterisks
+4. **Losses** (i.e.&nbsp;**cards remaining**) are specified by a line
+   `{L1} {L2} {L3} {L4}`
    1. Whitespace can be any non-newline whitespace
    2. Use suffix `t` if a player takes on all losses
       (for not playing high enough or failing to announce "last card")
@@ -90,7 +92,7 @@ Using the scorer, I can now report that
 * C averaged +2.84 per game;
 * H averaged +0.18 per game; and
 * All other regular players averaged a negative zero-sum score
-  (see Plot&nbsp;3 below).
+  (see [Plot&nbsp;3](#average-cards-lost-vs-average-zero-sum-score) below).
 
 For details see [/2013/big-two-2013-f-11-s.csv](2013/big-two-2013-f-11-s.csv).
 

@@ -25,7 +25,8 @@
 #     3.2 Player names cannot begin with a digit
 #     3.3 Player names cannot contain whitespace
 #     3.4 Player names cannot contain commas
-# 4. Losses are specified by a line {L1} {L2} {L3} {L4}
+#     3.5 Player names cannot contain asterisks
+# 4. Losses (cards remaining) are specified by a line {L1} {L2} {L3} {L4}
 #     4.1 Whitespace can be any non-newline whitespace
 #     4.2 Use suffix t if a player takes on all losses
 #         (for not playing high enough or failing to announce "last card")
@@ -75,18 +76,18 @@ def dict_to_csv(stats_dict, separate_regular):
     'net_score_avg'
   ]
   
-  # Create imaginary player '' for combined statistics of all players
-  add_player(stats_dict, '')
+  # Create combined player '*' for combined statistics of all players
+  add_player(stats_dict, '*')
   
   # Compute combined additive statistics
   for stat in stat_list[:5]:
-    stats_dict[''][stat] = sum(
+    stats_dict['*'][stat] = sum(
       [stats_dict[player][stat] for player in stats_dict]
     )
   
   # If no games have been played, rates are indeterminate
-  if stats_dict['']['games_played'] == 0:
-    p = stats_dict['']
+  if stats_dict['*']['games_played'] == 0:
+    p = stats_dict['*']
     p['cards_lost_avg'] = float('nan')
     p['games_won_pc'] = float('nan')
     p['games_fried_pc'] = float('nan')
@@ -110,7 +111,7 @@ def dict_to_csv(stats_dict, separate_regular):
     # Compute quarter of all games played
     # Note: {all games played} == {combined games won},
     # whereas 4 * {all games played} == {combined games played}
-    games_played_quarter = stats_dict['']['games_won'] / 4
+    games_played_quarter = stats_dict['*']['games_won'] / 4
     
     # Each player is regular if games played is at least this
     for player in stats_dict:
@@ -122,8 +123,8 @@ def dict_to_csv(stats_dict, separate_regular):
     sorted(stats_dict.items(), key = lambda x: x[1]['cards_lost_avg'])
   )
   
-  # Remove imaginary player from sorted dictionary
-  del stats_dict_sorted['']
+  # Remove combined player from sorted dictionary
+  del stats_dict_sorted['*']
   
   # Round rates to sensible number of decimal places
   for player in stats_dict:
@@ -171,11 +172,10 @@ def dict_to_csv(stats_dict, separate_regular):
     for player in stats_dict_sorted:
       stats_csv += stats_csv_row(player)
   
-  # Append imaginary player's row (combined statistics of all players)
-  stats_dict['']['regular'] = ''
-  stats_csv += ','.join(
-    ['*'] + [str(stats_dict[''][stat]) for stat in stat_list]
-  )
+  # Append combined player's row (combined statistics of all players)
+  stats_dict['*']['regular'] = ''
+  stats_csv += stats_csv_row('*')
+  stats_csv = stats_csv.strip()
   
   return stats_csv
 
@@ -281,6 +281,10 @@ def file_to_dict(file_name, start_date, end_date, fry_min):
         # Check for commas in player names
         if ',' in ''.join(player_list):
           raise_exception('player name contains comma')
+        
+        # Check for asterisks in player names
+        if '*' in ''.join(player_list):
+          raise_exception('player name contains asterisk')
         
         # Add players to dictionary of statistics
         for player in player_list:
