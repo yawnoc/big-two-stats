@@ -1,0 +1,8 @@
+player,games_played,cards_lost,games_won,games_fried,net_score,cards_lost_avg,games_won_pc,games_fried_pc,net_score_avg,regular
+C,6,3,4,0,127,0.5,66.7,0.0,21.17,True
+A,4,9,1,0,-6,2.25,25.0,0.0,-1.5,True
+D,6,30,0,1,19,5.0,0.0,16.7,3.17,True
+B,5,36,1,1,-86,7.2,20.0,20.0,-17.2,True
+E,2,22,0,1,21,11.0,0.0,50.0,10.5,True
+F,1,39,0,1,-75,39.0,0.0,100.0,-75.0,False
+*,24,139,6,4,0,5.79,25.0,16.7,0.0,

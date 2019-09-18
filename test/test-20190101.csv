@@ -1,0 +1,6 @@
+player,games_played,cards_lost,games_won,games_fried,net_score,cards_lost_avg,games_won_pc,games_fried_pc,net_score_avg
+C,3,3,1,0,6,1.0,33.3,0.0,2.0
+B,3,4,1,0,2,1.33,33.3,0.0,0.67
+A,3,5,1,0,-2,1.67,33.3,0.0,-0.67
+D,3,6,0,0,-6,2.0,0.0,0.0,-2.0
+*,12,18,3,0,0,1.5,25.0,0.0,0.0
