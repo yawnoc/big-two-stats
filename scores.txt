@@ -1,0 +1,8 @@
+20190918
+
+a b c d
+0 11 12 13
+1 1 1 0
+
+e b c d
+3t 2 1 0 # Player e takes on all losses

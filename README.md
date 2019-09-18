@@ -43,7 +43,7 @@ Regular players are those who have played at least 1 in 4 games.
 
 ## Simple example
 
-Run `big-two-stats.py scores` on the following `scores.txt`
+Running `big-two-stats.py scores` for the following [`scores.txt`](scores.txt)
 
     20190918
 
@@ -54,7 +54,7 @@ Run `big-two-stats.py scores` on the following `scores.txt`
     e b c d
     3t 2 1 0 # Player e takes on all losses
 
-to obtain the following output `scores.csv`:
+results in the following output [`scores.csv`](scores.csv):
 
 | player | games_played | cards_lost | games_won | games_fried | net_score | cards_lost_avg | games_won_pc | games_fried_pc | net_score_avg |
 | --- | --- | --- | --- | --- | --- | --- | --- | --- | --- |
@@ -97,10 +97,23 @@ For details see [/2013/big-two-2013-f-11-s.csv](2013/big-two-2013-f-11-s.csv).
 Finally here are some interesting plots
 (gnuplot code in the [/2013/](2013/) folder):
 
+### Average cards lost VS Proportion of games won
+
 ![cards_lost_avg VS games_won_pc](2013/cards_lost_avg-games_won_pc.svg)
+
+### Average cards lost VS Proportion of games fried
 
 ![cards_lost_avg VS games_fried_pc](2013/cards_lost_avg-games_fried_pc.svg)
 
+### Average cards lost VS Average zero-sum score
+
+The ideal relationship between cards lost `c` and zero-sum score `s` is
+`s = T - 4 c = 4 (c_* - c)`, where
+`T = 4 c_*` is the 4-player total cards lost average, and
+`c_*` is the combined cards lost average, i.e. `cards_lost_avg` for `'*'`.
+
 ![cards_lost_avg VS net_score_avg](2013/cards_lost_avg-net_score_avg.svg)
+
+### Proportion of games won VS Average zero-sum score
 
 ![games_won_pc VS net_score_avg](2013/games_won_pc-net_score_avg.svg)
