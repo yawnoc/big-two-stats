@@ -1,10 +1,10 @@
-# Big two (鋤大弟) scoring statistics
+# Big Two (鋤大弟) scoring statistics
 
-A scorer for Big two, written in Python.
+A scorer for Big Two, written in Python.
 
 ## Usage
 
-Parse the Big two scores in `{scores file}.txt` and return a CSV of statistics:
+Parse the Big Two scores in `{scores file}.txt` and return a CSV of statistics:
 
     big-two-stats.py {scores file}
 
@@ -67,7 +67,7 @@ results in the following output [`scores.csv`](scores.csv):
 | d | 3 | 39 | 2 | 1 | -62 | 13.0 | 66.7 | 33.3 | -20.67 |
 | * | 12 | 94 | 3 | 3 | 0 | 7.83 | 25.0 | 25.0 | 0.0 |
 
-For more examples see the [/test/](test/) folder.
+For more examples see the [`test/`](test/) folder.
 
 ## Scores from 2013
 
@@ -75,7 +75,7 @@ I have transcribed the handwritten scores from 2013 into text format
 for the scorer.
 By running the scorer for each new day's worth of scores transcribed,
 I discovered several mistakes in the calculations at the time. Apologies!
-For details see [/2013/big-two-2013.txt](2013/big-two-2013.txt).
+For details see [`2013/big-two-2013.txt`](2013/big-two-2013.txt).
 
 Back then I didn't do zero-sum scoring,
 which is when each player pays each other player 1 unit per card they've lost.
@@ -94,10 +94,10 @@ Using the scorer, I can now report that
 * All other regular players averaged a negative zero-sum score
   (see [Plot&nbsp;3](#average-cards-lost-vs-average-zero-sum-score) below).
 
-For details see [/2013/big-two-2013-f-11-s.csv](2013/big-two-2013-f-11-s.csv).
+For details see [`2013/big-two-2013-f-11-s.csv`](2013/big-two-2013-f-11-s.csv).
 
 Finally here are some interesting plots
-(gnuplot code in the [/2013/](2013/) folder):
+(gnuplot code in the [`2013/`](2013/) folder):
 
 ### Average cards lost VS Proportion of games won
 

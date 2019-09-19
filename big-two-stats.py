@@ -2,9 +2,9 @@
 
 ################################################################
 # big-two-stats.py
-# Modified: 20190918
+# Modified: 20190919
 ################################################################
-# Parse the Big two scores in {scores file}.txt and return a CSV of statistics:
+# Parse the Big Two scores in {scores file}.txt and return a CSV of statistics:
 #   big-two-stats.py {scores file}
 #   big-two-stats.py {scores file} {end date}
 #   big-two-stats.py {scores file} {start date} {end date}
@@ -16,7 +16,7 @@
 #   https://creativecommons.org/publicdomain/zero/1.0/
 # ABSOLUTELY NO WARRANTY, i.e. "GOD SAVE YOU"
 ################################################################
-# Specifications for plain-text file of Big two scores:
+# Specifications for plain-text file of Big Two scores:
 # 1. Hash (#) comments out the remainder of a line
 # 2. Date is specified by a line of digits {yyyymmdd}
 #     2.1 Extra digits are permitted but ignored
@@ -180,7 +180,7 @@ def dict_to_csv(stats_dict, separate_regular):
   return stats_csv
 
 ################################################################
-# Generate dictionary of statistics from plain-text file of Big two scores
+# Generate dictionary of statistics from plain-text file of Big Two scores
 ################################################################
 
 def file_to_dict(file_name, start_date, end_date, fry_min):
@@ -194,6 +194,40 @@ def file_to_dict(file_name, start_date, end_date, fry_min):
     if loss == 13:
       loss *= 3
     return loss
+  
+  ################################################################
+  # For raising exceptions
+  ################################################################
+  def raise_exception(message):
+    raise Exception(
+      'LINE ' + str(line_num) + ' OF '
+      + file_name + '.txt' + ' INVALID: '
+      + message
+    )
+  
+  ################################################################
+  # Regular expression for line specifying player names
+  ################################################################
+  name_pattern = r'([^\s0-9]\S*)'
+  space_pattern = r'\s+'
+  names_re = re.compile(
+    '^'
+    + 3 * (name_pattern + space_pattern)
+    + name_pattern
+    + '$'
+  )
+  
+  ################################################################
+  # Regular expression for line specifying losses
+  ################################################################
+  loss_pattern = r'([0-9]+)(t?)'
+  space_pattern = r'\s+'
+  losses_re = re.compile(
+    '^'
+    + 3 * (loss_pattern + space_pattern)
+    + loss_pattern
+    + '$'
+  )
   
   # Import .txt file as string
   txt_file = open(file_name + '.txt', 'r', encoding = 'utf-8')
@@ -219,16 +253,6 @@ def file_to_dict(file_name, start_date, end_date, fry_min):
   
   # Line-by-line:
   for line_num, line in enumerate(txt_file_string.splitlines(), 1):
-    
-    ################################################################
-    # For raising exceptions
-    ################################################################
-    def raise_exception(message):
-      raise Exception(
-        'LINE ' + str(line_num) + ' OF '
-        + file_name + '.txt' + ' INVALID: '
-        + message
-      )
     
     # Strip comments
     line = re.sub(r'#[\s\S]*', '', line)
@@ -257,18 +281,8 @@ def file_to_dict(file_name, start_date, end_date, fry_min):
     # If the start date has been reached
     if start_reached:
       
-      # Regular expression for line specifying player names
-      name_pattern = r'([^\s0-9]\S*)'
-      space_pattern = r'\s+'
-      names_re = re.compile(
-        '^'
-        + 3 * (name_pattern + space_pattern)
-        + name_pattern
-        + '$'
-      )
-      names_match = names_re.match(line)
-      
       # If line specifies player names
+      names_match = names_re.match(line)
       if names_match:
         
         # Set list of players
@@ -292,19 +306,9 @@ def file_to_dict(file_name, start_date, end_date, fry_min):
         
         # Next line
         continue
-        
-      # Regular expression for line specifying losses
-      loss_pattern = r'([0-9]+)(t?)'
-      space_pattern = r'\s+'
-      losses_re = re.compile(
-        '^'
-        + 3 * (loss_pattern + space_pattern)
-        + loss_pattern
-        + '$'
-      )
-      losses_match = losses_re.match(line)
       
       # If line specifies losses
+      losses_match = losses_re.match(line)
       if losses_match:
         
         # Players must already have been specified
@@ -441,13 +445,13 @@ if __name__ == '__main__':
   
   # Description
   parser = argparse.ArgumentParser(
-    description = 'Generates Big two statistics'
+    description = 'Generates Big Two statistics'
   )
   
   # Arguments
   parser.add_argument(
     'file_name',
-    help = 'File name of .txt Big two scores without extension'
+    help = 'File name of .txt Big Two scores without extension'
   )
   parser.add_argument(
     'date_spec',

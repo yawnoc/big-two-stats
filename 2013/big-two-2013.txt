@@ -1,5 +1,5 @@
 ################################################################
-# Big two scores from 2013
+# Big Two scores from 2013
 ################################################################
 
 # Transcribed from the original handwritten scores into .txt format.
