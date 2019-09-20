@@ -119,8 +119,12 @@ def dict_to_csv(stats_dict, separate_regular):
       p['regular'] = p['games_played'] >= games_played_quarter
   
   # Sort dictionary by average cards lost (before rounding below)
+  # with tie breaking by player name
   stats_dict_sorted = OrderedDict(
-    sorted(stats_dict.items(), key = lambda x: x[1]['cards_lost_avg'])
+    sorted(
+      stats_dict.items(),
+      key = lambda x: (x[1]['cards_lost_avg'], x[0])
+    )
   )
   
   # Remove combined player from sorted dictionary

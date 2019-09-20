@@ -17,7 +17,8 @@ args_list_list = [
   ['20190103', '20190103'],
   ['20190104', '20190104'],
   ['20190104', '20190104', '-f', '11'],
-  ['-s']  
+  ['-s'],
+  ['20190105', '20190105']
 ]
 for args_list in args_list_list:
   big_two_call('test/test', args_list)

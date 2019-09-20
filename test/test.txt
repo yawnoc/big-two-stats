@@ -24,6 +24,9 @@
 # Separately display regular players
 # big-two-stats.py test/test -s
 
+# Sort ties by name
+# big-two-stats.py test/test 20190105 20190105
+
 20190101
 
 A B C D
@@ -45,3 +48,11 @@ B C D E
 
 C D E F
 0 10 11 13
+
+20190105
+
+X Z W Y
+0 1 1 1
+1 0 1 1
+1 1 0 1
+1 1 1 0
