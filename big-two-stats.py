@@ -2,7 +2,7 @@
 
 ################################################################
 # big-two-stats.py
-# Modified: 20190919
+# Modified: 20190920
 ################################################################
 # Parse the Big Two scores in {scores file}.txt and return a CSV of statistics:
 #   big-two-stats.py {scores file}
@@ -46,14 +46,29 @@ def add_player(stats_dict, player):
   # If player has no previous record
   if player not in stats_dict:
     
-    # Provide a clean slate
-    stats_dict[player] = {
-      'games_played': 0,
-      'cards_lost': 0,
-      'games_won': 0,
-      'games_fried': 0,
-      'net_score': 0
-    }
+    # Provide a clean slate of additive statistics
+    stats_dict[player] = {stat: 0 for stat in stat_list_additive()}
+
+################################################################
+# Additive statistics and non-additive statistics (rates)
+################################################################
+
+def stat_list_additive():
+  return [
+    'games_played',
+    'cards_lost',
+    'games_won',
+    'games_fried',
+    'net_score'
+  ]
+
+def stat_list_rates():
+  return [
+    'cards_lost_avg',
+    'games_won_pc',
+    'games_fried_pc',
+    'net_score_avg'
+  ]
 
 ################################################################
 # Convert dictionary of statistics to CSV string
@@ -61,37 +76,22 @@ def add_player(stats_dict, player):
 
 def dict_to_csv(stats_dict, separate_regular):
   
-  # List of statistics
-  stat_list = [
-    # Additive
-    'games_played',
-    'cards_lost',
-    'games_won',
-    'games_fried',
-    'net_score',
-    # Rates (non-additive)
-    'cards_lost_avg',
-    'games_won_pc',
-    'games_fried_pc',
-    'net_score_avg'
-  ]
+  # List of all statistics
+  stat_list = stat_list_additive() + stat_list_rates()
   
   # Create combined player '*' for combined statistics of all players
   add_player(stats_dict, '*')
   
   # Compute combined additive statistics
-  for stat in stat_list[:5]:
+  for stat in stat_list_additive():
     stats_dict['*'][stat] = sum(
-      [stats_dict[player][stat] for player in stats_dict]
+      stats_dict[player][stat] for player in stats_dict
     )
   
   # If no games have been played, rates are indeterminate
   if stats_dict['*']['games_played'] == 0:
-    p = stats_dict['*']
-    p['cards_lost_avg'] = float('nan')
-    p['games_won_pc'] = float('nan')
-    p['games_fried_pc'] = float('nan')
-    p['net_score_avg'] = float('nan')
+    for stat in stat_list_rates():
+      stats_dict['*'][stat] = float('nan')
     
   # Otherwise compute rates (non-additive statistics) for all players
   else:
@@ -168,7 +168,7 @@ def dict_to_csv(stats_dict, separate_regular):
   # Otherwise
   else:
     
-    # Append all real players' rows sorted by average cards lost
+    # Append all (non-combined) players' rows sorted by average cards lost
     for player in stats_dict_sorted:
       stats_csv += stats_csv_row(player)
   
@@ -332,8 +332,10 @@ def file_to_dict(file_name, start_date, end_date, fry_min):
         winner = player_list[loss_list.index(0)]
         stats_dict[winner]['games_won'] += 1
         
-        # Fry adjustments
+        # Set list of fry counts
         fry_list = [int(loss >= fry_min) for loss in loss_list]
+        
+        # Adjust losses for frying
         loss_list = [fry(loss) for loss in loss_list]
         
         # Parse specification for a player taking on all losses
@@ -457,7 +459,7 @@ if __name__ == '__main__':
     'date_spec',
     help = (
       'Date range specification, '
-      'either none OR {end date} OR {start date} {end date}'
+      'either empty OR {end date} OR {start date} {end date}'
     ),
     nargs = '*'
   )
