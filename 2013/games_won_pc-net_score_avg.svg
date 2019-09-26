@@ -295,6 +295,10 @@
 </g>
 	<g id="gnuplot_plot_1" ><title>gnuplot_plot_1</title>
 <g fill="none" color="black" stroke="currentColor" stroke-width="1.00" stroke-linecap="butt" stroke-linejoin="miter">
+</g>
+	</g>
+	<g id="gnuplot_plot_2" ><title>gnuplot_plot_2</title>
+<g fill="none" color="black" stroke="currentColor" stroke-width="1.00" stroke-linecap="butt" stroke-linejoin="miter">
 	<use xlink:href='#gpPt5' transform='translate(152.7,86.8) scale(4.80)' color='rgb(  0,   0, 255)'/>
 	<use xlink:href='#gpPt5' transform='translate(359.7,230.9) scale(4.80)' color='rgb(  0,   0, 255)'/>
 	<use xlink:href='#gpPt5' transform='translate(546.9,245.0) scale(4.80)' color='rgb(  0,   0, 255)'/>
@@ -304,7 +308,7 @@
 	<use xlink:href='#gpPt5' transform='translate(418.8,379.4) scale(4.80)' color='rgb(  0,   0, 255)'/>
 </g>
 	</g>
-	<g id="gnuplot_plot_2" ><title>gnuplot_plot_2</title>
+	<g id="gnuplot_plot_3" ><title>gnuplot_plot_3</title>
 <g fill="none" color="black" stroke="currentColor" stroke-width="1.00" stroke-linecap="butt" stroke-linejoin="miter">
 	<g transform="translate(161.1,106.4)" stroke="none" fill="black" font-family="Helvetica" font-size="16.00"  text-anchor="middle">
 		<text><tspan font-family="Helvetica" >C</tspan></text>
@@ -329,7 +333,7 @@
 	</g>
 </g>
 	</g>
-	<g id="gnuplot_plot_3" ><title>gnuplot_plot_3</title>
+	<g id="gnuplot_plot_4" ><title>gnuplot_plot_4</title>
 <g fill="none" color="black" stroke="currentColor" stroke-width="1.00" stroke-linecap="butt" stroke-linejoin="miter">
 	<g transform="translate(331.7,244.6)" stroke="none" fill="black" font-family="Helvetica" font-size="16.00"  text-anchor="middle">
 		<text><tspan font-family="Helvetica" >*</tspan></text>
@@ -341,11 +345,7 @@
 <g fill="none" color="black" stroke="currentColor" stroke-width="1.00" stroke-linecap="butt" stroke-linejoin="miter">
 </g>
 	</g>
-	<g id="gnuplot_plot_4" ><title>gnuplot_plot_4</title>
-<g fill="none" color="black" stroke="currentColor" stroke-width="1.00" stroke-linecap="butt" stroke-linejoin="miter">
-</g>
-	</g>
-<g fill="none" color="#FFFFFF" stroke="rgb(  0, 192,   0)" stroke-width="2.00" stroke-linecap="butt" stroke-linejoin="miter">
+<g fill="none" color="#FFFFFF" stroke="black" stroke-width="2.00" stroke-linecap="butt" stroke-linejoin="miter">
 </g>
 <g fill="none" color="black" stroke="currentColor" stroke-width="2.00" stroke-linecap="butt" stroke-linejoin="miter">
 </g>

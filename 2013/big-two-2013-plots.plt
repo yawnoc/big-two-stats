@@ -31,6 +31,13 @@ column_number(q) = \
   'ERROR: unknown quantity '.q
 
 ################################################################
+# Functions: quantity -> column and stringcolumn
+################################################################
+
+content_column(q) = column(column_number(q))
+string_column(q) = stringcolumn(column_number(q))
+
+################################################################
 # Function: quantity -> long name of quantity
 ################################################################
 
@@ -74,10 +81,10 @@ set datafile separator comma
 # Functions: index -> x and y columns if corresponding player is regular
 ################################################################
 
-is_regular(x) = stringcolumn(column_number('regular')) eq 'True'
+is_regular(dummy) = string_column('regular') eq 'True'
 
-regular_x(i) = is_regular(0) ? column(column_number(quantity_x(i))) : NaN
-regular_y(i) = is_regular(0) ? column(column_number(quantity_y(i))) : NaN
+regular_x(i) = is_regular(0) ? content_column(quantity_x(i)) : NaN
+regular_y(i) = is_regular(0) ? content_column(quantity_y(i)) : NaN
 
 ################################################################
 # Functions: index -> x and y columns if corresponding player is combined
@@ -85,17 +92,16 @@ regular_y(i) = is_regular(0) ? column(column_number(quantity_y(i))) : NaN
 
 # (Here 'combined' means the player '*' for all statistics combined.)
 
-is_non_regular(x) = stringcolumn(column_number('regular')) eq 'False'
-is_combined(x) = ! (is_regular(0) || is_non_regular(0))
+is_combined(dummy) = string_column('player') eq '*'
 
-combined_x(i) = is_combined(0) ? column(column_number(quantity_x(i))) : NaN
-combined_y(i) = is_combined(0) ? column(column_number(quantity_y(i))) : NaN
+combined_x(i) = is_combined(0) ? content_column(quantity_x(i)) : NaN
+combined_y(i) = is_combined(0) ? content_column(quantity_y(i)) : NaN
 
 ################################################################
 # Function: player -> if corresponding player matches
 ################################################################
 
-match_player(p) = stringcolumn(column_number('player')) eq p
+match_player(p) = string_column('player') eq p
 
 ################################################################
 # Functions: index -> manually tweaks for offsets
@@ -173,10 +179,15 @@ do for [i = 1:4] {
   }
   
   # Plot:
-  # (a) regular player data points
-  # (b) regular player labels
-  # (c) combined player data point and label
+  # (a) combined player data point and label
+  # (b) regular player data points
+  # (c) regular player labels
   plot \
+    \
+    ideal_net_score(i, x) \
+      linetype rgb 'web-green' \
+    title ideal_net_score_title(i) \
+    , \
     \
     csv_file \
     using (regular_x(i)) : (regular_y(i)) \
@@ -213,10 +224,5 @@ do for [i = 1:4] {
         linecolor rgb 'red' \
         pointtype 6 \
         pointsize 0.8 \
-    notitle \
-    , \
-    \
-    ideal_net_score(i, x) \
-      linetype rgb 'web-green' \
-    title ideal_net_score_title(i)
+    notitle
 }
