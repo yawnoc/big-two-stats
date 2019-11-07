@@ -2,7 +2,6 @@
 
 ################################################################
 # big-two-stats.py
-# Modified: 20190920
 ################################################################
 # Parse the Big Two scores in {scores file}.txt and return a CSV of statistics:
 #   big-two-stats.py {scores file}
