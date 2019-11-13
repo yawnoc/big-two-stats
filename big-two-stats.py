@@ -233,8 +233,8 @@ def file_to_dict(file_name, start_date, end_date, fry_min):
   )
   
   # Import .txt file as string
-  txt_file = open(file_name + '.txt', 'r', encoding = 'utf-8')
-  txt_file_string = txt_file.read()
+  with open(file_name + '.txt', 'r', encoding = 'utf-8') as txt_file:
+    txt_file_string = txt_file.read()
   
   # Whether the start date has been reached
   start_reached = start_date == float('-inf')
@@ -439,8 +439,8 @@ def main(args):
   stats_csv = dict_to_csv(stats_dict, separate_regular)
   
   # Export .csv file
-  csv_file = open(file_name_export + '.csv', 'w', encoding = 'utf-8')
-  csv_file.write(stats_csv)
+  with open(file_name_export + '.csv', 'w', encoding = 'utf-8') as csv_file:
+    csv_file.write(stats_csv)
 
 ################################################################
 # Argument parsing
