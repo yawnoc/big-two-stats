@@ -5,12 +5,14 @@
 ################################################################
 # Parse the Big Two scores in {scores file}.txt and return a CSV of statistics:
 #   big-two-stats.py {scores file}
-#   big-two-stats.py {scores file} {end date}
-#   big-two-stats.py {scores file} {start date} {end date}
+# Optional argument -s or --start for start date (default 0):
+#   big-two-stats.py {...} -s {start date}
+# Optional argument -e or --end for end date (default 10 ** 8):
+#   big-two-stats.py {...} -e {end date}
 # Optional argument -f or --fry for frying threshold (default 10):
 #   big-two-stats.py {...} -f {frying threshold}
-# Optional flag -s or --sep for displaying regular players separately:
-#   big-two-stats.py {...} -s
+# Optional flag --sep for displaying regular players separately:
+#   big-two-stats.py {...} --sep
 # Released into the public domain (CC0):
 #   https://creativecommons.org/publicdomain/zero/1.0/
 # ABSOLUTELY NO WARRANTY, i.e. "GOD SAVE YOU"
@@ -35,6 +37,14 @@
 from collections import OrderedDict
 import argparse
 import re
+
+################################################################
+# CONSTANTS
+################################################################
+
+DEFAULT_START_DATE = 0
+DEFAULT_END_DATE = 10 ** 8
+DEFAULT_FRY_MIN = 10
 
 ################################################################
 # Add player to dictionary of statistics
@@ -138,15 +148,12 @@ def dict_to_csv(stats_dict, separate_regular):
     p['net_score_avg'] = round(p['net_score_avg'], 2)
   
   # Headings for CSV string of statistics
-  stats_csv = ','.join(['player'] + stat_list) + '\n'
+  stats_csv = list_to_csv_line(['player'] + stat_list)
   
   # Player's row of statistics to be appended
   def stats_csv_row(player):
-    return (
-      ','.join(
-        [player] + [str(stats_dict[player][stat]) for stat in stat_list]
-      )
-      + '\n'
+    return list_to_csv_line(
+      [player] + [str(stats_dict[player][stat]) for stat in stat_list]
     )
   
   # If regular players are to be displayed separately
@@ -178,9 +185,16 @@ def dict_to_csv(stats_dict, separate_regular):
   # Append combined player's row (combined statistics of all players)
   stats_dict['*']['regular'] = ''
   stats_csv += stats_csv_row('*')
-  stats_csv = stats_csv.strip()
   
   return stats_csv
+
+################################################################
+# Convert list to line of CSV
+################################################################
+
+def list_to_csv_line(list_):
+  
+  return ','.join(list_) + '\n'
 
 ################################################################
 # Generate dictionary of statistics from plain-text file of Big Two scores
@@ -203,15 +217,13 @@ def file_to_dict(file_name, start_date, end_date, fry_min):
   ################################################################
   def raise_exception(message):
     raise Exception(
-      'LINE ' + str(line_num) + ' OF '
-      + file_name + '.txt' + ' INVALID: '
-      + message
+      f'LINE {line_num} OF {file_name}.txt INVALID: {message}'
     )
   
   ################################################################
   # Regular expression for line specifying player names
   ################################################################
-  name_pattern = r'([^\s0-9]\S*)'
+  name_pattern = r'([^\s0-9][^\s,\*]*)'
   space_pattern = r'\s+'
   names_re = re.compile(
     '^'
@@ -233,25 +245,16 @@ def file_to_dict(file_name, start_date, end_date, fry_min):
   )
   
   # Import .txt file as string
-  with open(file_name + '.txt', 'r', encoding = 'utf-8') as txt_file:
+  with open(f'{file_name}.txt', 'r', encoding = 'utf-8') as txt_file:
     txt_file_string = txt_file.read()
   
   # Whether the start date has been reached
-  start_reached = start_date == float('-inf')
+  start_reached = True
+  
+  # Whether the end date has been exceeded
+  end_exceeded = False
   
   # Initialise dictionary
-  # {
-  #   player_a: {
-  #     'games_played': ...,
-  #     'cards_lost': ...,
-  #     'games_won': ...,
-  #     'games_fried': ...,
-  #     'net_score': ...
-  #   },
-  #   player_b: {
-  #     ...
-  #   }
-  # }
   stats_dict = {}
   
   # Line-by-line:
@@ -268,21 +271,19 @@ def file_to_dict(file_name, start_date, end_date, fry_min):
     if line.isdigit():
       
       # Extract first 8 digits {yyyymmdd}
-      yyyymmdd = line[:8]
+      yyyymmdd = int(line[:8])
       
       # Whether the start date has been reached
-      # (float is needed to compare against plus or minus infinity)
-      start_reached = float(yyyymmdd) >= start_date
+      start_reached = yyyymmdd >= start_date
       
-      # Break loop if end date has been exceeded
-      if float(yyyymmdd) > end_date:
-        break
+      # Whether the end date has been exceeded
+      end_exceeded = yyyymmdd > end_date
       
-      # Next line
+      # Go to next line
       continue
       
-    # If the start date has been reached
-    if start_reached:
+    # If within date range
+    if start_reached and not end_exceeded:
       
       # If line specifies player names
       names_match = names_re.match(line)
@@ -295,19 +296,11 @@ def file_to_dict(file_name, start_date, end_date, fry_min):
         if len(player_list) != len(set(player_list)):
           raise_exception('duplicate player')
         
-        # Check for commas in player names
-        if ',' in ''.join(player_list):
-          raise_exception('player name contains comma')
-        
-        # Check for asterisks in player names
-        if '*' in ''.join(player_list):
-          raise_exception('player name contains asterisk')
-        
         # Add players to dictionary of statistics
         for player in player_list:
           add_player(stats_dict, player)
         
-        # Next line
+        # Go to next line
         continue
       
       # If line specifies losses
@@ -377,7 +370,7 @@ def file_to_dict(file_name, start_date, end_date, fry_min):
           p['games_fried'] += fry_list[n]
           p['net_score'] += net_score_list[n]
         
-        # Next line
+        # Go to next line
         continue
       
       # Otherwise if the line is non-empty, it is invalid
@@ -402,21 +395,15 @@ def main(args):
   # Export file name
   file_name_export = file_name
   
-  # Date range specification is:
-  date_spec = args.date_spec
-  #   {start date} {end date} ...
-  if len(date_spec) >= 2:
-    start_date, end_date = [int(spec) for spec in date_spec[:2]]
-    file_name_export += '-' + date_spec[0] + '-' + date_spec[1]
-  #   {end date}
-  if len(date_spec) == 1:
-    start_date = float('-inf')
-    end_date = int(date_spec[0])
-    file_name_export += '-' + date_spec[0]
-  #   empty
-  if len(date_spec) == 0:
-    start_date = float('-inf')
-    end_date = float('inf')
+  # Start date
+  start_date = args.start_date
+  if start_date != DEFAULT_START_DATE:
+    file_name_export += f'-s_{start_date}'
+  
+  # End date
+  end_date = args.end_date
+  if end_date != DEFAULT_END_DATE:
+    file_name_export += f'-e_{end_date}'
   
   # Frying threshold
   fry_min = args.fry_min
@@ -424,13 +411,13 @@ def main(args):
     raise Exception(
       'Frying threshold must be a positive integer less than 13'
     )
-  if fry_min != 10:
-    file_name_export += '-f-' + str(fry_min)
+  if fry_min != DEFAULT_FRY_MIN:
+    file_name_export += f'-f_{fry_min}'
   
   # Separate regular
   separate_regular = args.separate_regular
   if separate_regular:
-    file_name_export += '-s'
+    file_name_export += '-sep'
   
   # Generate dictionary of statistics from file
   stats_dict = file_to_dict(file_name, start_date, end_date, fry_min)
@@ -439,7 +426,7 @@ def main(args):
   stats_csv = dict_to_csv(stats_dict, separate_regular)
   
   # Export .csv file
-  with open(file_name_export + '.csv', 'w', encoding = 'utf-8') as csv_file:
+  with open(f'{file_name_export}.csv', 'w', encoding = 'utf-8') as csv_file:
     csv_file.write(stats_csv)
 
 ################################################################
@@ -459,24 +446,33 @@ if __name__ == '__main__':
     help = 'File name of .txt Big Two scores without extension'
   )
   parser.add_argument(
-    'date_spec',
-    help = (
-      'Date range specification, '
-      'either empty OR {end date} OR {start date} {end date}'
-    ),
-    nargs = '*'
+    '-s',
+    '--start',
+    dest = 'start_date',
+    help = f'Start date (default {DEFAULT_START_DATE})',
+    nargs = '?',
+    default = DEFAULT_START_DATE,
+    type = int
+  )
+  parser.add_argument(
+    '-e',
+    '--end',
+    dest = 'end_date',
+    help = f'End date (default {DEFAULT_END_DATE})',
+    nargs = '?',
+    default = DEFAULT_END_DATE,
+    type = int
   )
   parser.add_argument(
     '-f',
     '--fry',
     dest = 'fry_min',
-    help = 'Frying threshold, usually 10 (default) or 11',
+    help = f'Frying threshold (default {DEFAULT_FRY_MIN})',
     nargs = '?',
-    default = 10,
+    default = DEFAULT_FRY_MIN,
     type = int
   )
   parser.add_argument(
-    '-s',
     '--sep',
     dest = 'separate_regular',
     action = 'store_true',
