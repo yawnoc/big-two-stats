@@ -223,7 +223,7 @@ def file_to_dict(file_name, start_date, end_date, fry_min):
   ################################################################
   # Regular expression for line specifying player names
   ################################################################
-  name_pattern = r'([^\s0-9][^\s,\*]*)'
+  name_pattern = r'([^\s0-9,\*][^\s,\*]*)'
   space_pattern = r'\s+'
   names_re = re.compile(
     '^'
