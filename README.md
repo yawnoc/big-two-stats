@@ -8,9 +8,13 @@ Parse the Big Two scores in `{scores file}.txt` and return a CSV of statistics:
 
     big-two-stats.py {scores file}
 
-    big-two-stats.py {scores file} {end date}
+### Optional argument `-s` or `--start` for start date (default 0)
 
-    big-two-stats.py {scores file} {start date} {end date}
+    big-two-stats.py {...} -s {start date}
+
+### Optional argument `-e` or `--end` for end date (default 10 ** 8)
+
+    big-two-stats.py {...} -e {end date}
 
 ### Optional argument `-f` or `--fry` for frying threshold (default 10)
 
@@ -19,9 +23,9 @@ Parse the Big Two scores in `{scores file}.txt` and return a CSV of statistics:
 Frying threshold is the number of cards at which losses are doubled.
 A loss of 13 cards is always tripled.
 
-### Optional flag `-s` or `--sep` for displaying regular players separately
+### Optional flag `--sep` for displaying regular players separately
 
-    big-two-stats.py {...} -s
+    big-two-stats.py {...} --sep
 
 Regular players are those who have played at least 1 in 4 games.
 
