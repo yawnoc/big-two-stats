@@ -4,28 +4,28 @@
 # big-two-stats.py test/test
 
 # No games
-# big-two-stats.py test/test 20190100
+# big-two-stats.py test/test -e 20190100
 
 # First day only
-# big-two-stats.py test/test 20190101
+# big-two-stats.py test/test -e 20190101
 
 # First two days only
-# big-two-stats.py test/test 20190102
+# big-two-stats.py test/test -e 20190102
 
 # Taking on all losses
-# big-two-stats.py test/test 20190103 20190103
+# big-two-stats.py test/test -s 20190103 -e 20190103
 
 # Frying threshold 10
-# big-two-stats.py test/test 20190104 20190104
+# big-two-stats.py test/test -s 20190104 -e 20190104
 
 # Frying threshold 11
-# big-two-stats.py test/test 20190104 20190104 -f 11
+# big-two-stats.py test/test -s 20190104 -e 20190104 -f 11
 
 # Separately display regular players
-# big-two-stats.py test/test -s
+# big-two-stats.py test/test --sep
 
 # Sort ties by name
-# big-two-stats.py test/test 20190105 20190105
+# big-two-stats.py test/test -s 20190105 -e 20190105
 
 20190101
 
