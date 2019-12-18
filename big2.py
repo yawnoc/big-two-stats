@@ -1,18 +1,18 @@
 #!/usr/bin/python
 
 ################################################################
-# big-two-stats.py
+# big2.py
 ################################################################
 # Parse the Big Two scores in {scores file}.txt and return a CSV of statistics:
-#   big-two-stats.py {scores file}
+#   big2.py {scores file}
 # Optional argument -s or --start for start date (default 0):
-#   big-two-stats.py {...} -s {start date}
+#   big2.py {...} -s {start date}
 # Optional argument -e or --end for end date (default 10 ** 8):
-#   big-two-stats.py {...} -e {end date}
+#   big2.py {...} -e {end date}
 # Optional argument -f or --fry for frying threshold (default 10):
-#   big-two-stats.py {...} -f {frying threshold}
+#   big2.py {...} -f {frying threshold}
 # Optional flag --sep for displaying regular players separately:
-#   big-two-stats.py {...} --sep
+#   big2.py {...} --sep
 # Released into the public domain (CC0):
 #   https://creativecommons.org/publicdomain/zero/1.0/
 # ABSOLUTELY NO WARRANTY, i.e. "GOD SAVE YOU"

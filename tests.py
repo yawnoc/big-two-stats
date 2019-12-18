@@ -3,7 +3,7 @@
 import subprocess
 
 def big_two_call(scores_file, args_list = []):
-  subprocess.call(['python', 'big-two-stats.py', scores_file] + args_list)
+  subprocess.call(['python', 'big2.py', scores_file] + args_list)
 
 # For scores.txt
 big_two_call('scores')

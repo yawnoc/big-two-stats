@@ -3,7 +3,7 @@
 ################################################################
 
 # Transcribed from the original handwritten scores into .txt format.
-# To be passed to big-two-stats.py.
+# To be passed to big2.py.
 
 # At the time:
 # 1. Frying threshold of 11 was used (so use -f 11)
