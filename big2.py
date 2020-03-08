@@ -4,7 +4,7 @@
 # big2.py
 ################################################################
 # Parse the Big Two scores in {scores file}.txt and return a CSV of statistics:
-#   big2.py {scores file}
+#   big2.py {scores file}.txt
 # Optional argument -s or --start for start date (default 0):
 #   big2.py {...} -s {start date}
 # Optional argument -e or --end for end date (default 10 ** 8):
@@ -391,6 +391,9 @@ def main(args):
   
   # File name
   file_name = args.file_name
+  
+  # Remove trailing "." or ".txt" if provided
+  file_name = re.sub(r'\.(txt)?$', '', file_name)
   
   # Export file name
   file_name_export = file_name

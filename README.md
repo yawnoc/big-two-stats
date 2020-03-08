@@ -6,7 +6,7 @@ A scorer for Big Two, written in Python.
 
 Parse the Big Two scores in `{scores file}.txt` and return a CSV of statistics:
 
-    big2.py {scores file}
+    big2.py {scores file}.txt
 
 ### Optional argument `-s` or `--start` for start date (default 0)
 
