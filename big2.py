@@ -225,7 +225,7 @@ def file_to_dict(file_name, start_date, end_date, fry_min):
   ################################################################
   name_pattern = r'([^\s0-9,\*][^\s,\*]*)'
   space_pattern = r'\s+'
-  names_re = re.compile(
+  names_regex = re.compile(
     '^'
     + 3 * (name_pattern + space_pattern)
     + name_pattern
@@ -237,7 +237,7 @@ def file_to_dict(file_name, start_date, end_date, fry_min):
   ################################################################
   loss_pattern = r'([0-9]+)(t?)'
   space_pattern = r'\s+'
-  losses_re = re.compile(
+  losses_regex = re.compile(
     '^'
     + 3 * (loss_pattern + space_pattern)
     + loss_pattern
@@ -286,7 +286,7 @@ def file_to_dict(file_name, start_date, end_date, fry_min):
     if start_reached and not end_exceeded:
       
       # If line specifies player names
-      names_match = names_re.match(line)
+      names_match = names_regex.match(line)
       if names_match:
         
         # Set list of players
@@ -304,7 +304,7 @@ def file_to_dict(file_name, start_date, end_date, fry_min):
         continue
       
       # If line specifies losses
-      losses_match = losses_re.match(line)
+      losses_match = losses_regex.match(line)
       if losses_match:
         
         # Players must already have been specified
