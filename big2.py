@@ -214,27 +214,23 @@ def file_to_dict(file_name, start_date, end_date, fry_min):
   Generate a dictionary of stats from a file of Big Two scores.
   """
   
-  ################################################################
-  # For frying
-  ################################################################
   def fry(loss):
+    "Convert fried losses."
     if fry_min <= loss < 13:
       loss *= 2
     if loss == 13:
       loss *= 3
     return loss
   
-  ################################################################
-  # For raising exceptions
-  ################################################################
   def raise_exception(message):
+    """
+    Raise an exception, noting the current line.
+    """
     raise Exception(
       f'LINE {line_num} OF {file_name}.txt INVALID: {message}'
     )
   
-  ################################################################
   # Regular expression for line specifying player names
-  ################################################################
   name_pattern = r'([^\s0-9,\*][^\s,\*]*)'
   space_pattern = r'\s+'
   names_regex = re.compile(
@@ -244,9 +240,7 @@ def file_to_dict(file_name, start_date, end_date, fry_min):
     + '$'
   )
   
-  ################################################################
   # Regular expression for line specifying losses
-  ################################################################
   loss_pattern = r'([0-9]+)(t?)'
   space_pattern = r'\s+'
   losses_regex = re.compile(
@@ -452,7 +446,7 @@ if __name__ == '__main__':
   # Arguments
   parser.add_argument(
     'file_name',
-    help='File name of Big Two scores file.',
+    help='File name of Big Two scores file',
     metavar='file_name[.[txt]]'
   )
   parser.add_argument(
