@@ -1,56 +1,63 @@
 #!/usr/bin/python
 
-################################################################
-# big2.py
-################################################################
-# Parse the Big Two scores in {scores file}.txt and return a CSV of statistics:
-#   big2.py {scores file}.txt
-# Optional argument -s or --start for start date (default 0):
-#   big2.py {...} -s {start date}
-# Optional argument -e or --end for end date (default 10 ** 8):
-#   big2.py {...} -e {end date}
-# Optional argument -f or --fry for frying threshold (default 10):
-#   big2.py {...} -f {frying threshold}
-# Optional flag --sep for displaying regular players separately:
-#   big2.py {...} --sep
-# Released into the public domain (CC0):
-#   https://creativecommons.org/publicdomain/zero/1.0/
-# ABSOLUTELY NO WARRANTY, i.e. "GOD SAVE YOU"
-################################################################
-# Specifications for plain-text file of Big Two scores:
-# 1. Hash (#) comments out the remainder of a line
-# 2. Date is specified by a line of digits {yyyymmdd}
-#     2.1 Extra digits are permitted but ignored
-# 3. Players are specified by a line {P1} {P2} {P3} {P4}
-#     3.1 Whitespace can be any non-newline whitespace
-#     3.2 Player names cannot begin with a digit
-#     3.3 Player names cannot contain whitespace
-#     3.4 Player names cannot contain commas
-#     3.5 Player names cannot contain asterisks
-# 4. Losses (cards remaining) are specified by a line {L1} {L2} {L3} {L4}
-#     4.1 Whitespace can be any non-newline whitespace
-#     4.2 Use suffix t if a player takes on all losses
-#         (for not playing high enough or failing to announce "last card")
-# 5. Any other non-comment non-whitespace text is invalid
-################################################################
+"""
+----------------------------------------------------------------
+big2.py
+----------------------------------------------------------------
+
+Parse the Big Two scores in {scores file}.txt and return a CSV of statistics:
+  big2.py {scores file}.txt
+
+Optional argument -s or --start for start date (default 0):
+  big2.py {...} -s {start date}
+
+Optional argument -e or --end for end date (default 10 ** 8):
+  big2.py {...} -e {end date}
+
+Optional argument -f or --fry for frying threshold (default 10):
+  big2.py {...} -f {frying threshold}
+
+Optional flag --sep for displaying regular players separately:
+  big2.py {...} --sep
+
+Released into the public domain (CC0):
+  <https://creativecommons.org/publicdomain/zero/1.0/>
+ABSOLUTELY NO WARRANTY, i.e. "GOD SAVE YOU"
+
+Specifications for plain-text file of Big Two scores:
+
+1. Hash (#) comments out the remainder of a line
+2. Date is specified by a line of digits {yyyymmdd}
+    2.1 Extra digits are permitted but ignored
+3. Players are specified by a line {P1} {P2} {P3} {P4}
+    3.1 Whitespace can be any non-newline whitespace
+    3.2 Player names cannot begin with a digit
+    3.3 Player names cannot contain whitespace
+    3.4 Player names cannot contain commas
+    3.5 Player names cannot contain asterisks
+4. Losses (cards remaining) are specified by a line {L1} {L2} {L3} {L4}
+    4.1 Whitespace can be any non-newline whitespace
+    4.2 Use suffix t if a player takes on all losses
+        (for not playing high enough or failing to announce "last card")
+5. Any other non-comment non-whitespace text is invalid
+"""
+
 
 from collections import OrderedDict
 import argparse
 import re
 
-################################################################
-# CONSTANTS
-################################################################
 
 DEFAULT_START_DATE = 0
 DEFAULT_END_DATE = 10 ** 8
 DEFAULT_FRY_MIN = 10
 
-################################################################
-# Add player to dictionary of statistics
-################################################################
+
 
 def add_player(stats_dict, player):
+  """
+  Add a player to a dictionary of statistics.
+  """
   
   # If player has no previous record
   if player not in stats_dict:
@@ -58,11 +65,12 @@ def add_player(stats_dict, player):
     # Provide a clean slate of additive statistics
     stats_dict[player] = {stat: 0 for stat in stat_list_additive()}
 
-################################################################
-# Additive statistics and non-additive statistics (rates)
-################################################################
 
 def stat_list_additive():
+  """
+  Return list of the additive statistics (rates).
+  """
+  
   return [
     'games_played',
     'cards_lost',
@@ -72,6 +80,10 @@ def stat_list_additive():
   ]
 
 def stat_list_rates():
+  """
+  Return list of the non-additive statistics.
+  """
+  
   return [
     'cards_lost_avg',
     'games_won_pc',
@@ -79,11 +91,12 @@ def stat_list_rates():
     'net_score_avg'
   ]
 
-################################################################
-# Convert dictionary of statistics to CSV string
-################################################################
+
 
 def dict_to_csv(stats_dict, separate_regular):
+  """
+  Convert a dictionary of statistics to a CSV string.
+  """
   
   # List of all statistics
   stat_list = stat_list_additive() + stat_list_rates()
@@ -188,19 +201,19 @@ def dict_to_csv(stats_dict, separate_regular):
   
   return stats_csv
 
-################################################################
-# Convert list to line of CSV
-################################################################
 
 def list_to_csv_line(list_):
+  """
+  Convert a list to a string for a line of a CSV.
+  """
   
   return ','.join(list_) + '\n'
 
-################################################################
-# Generate dictionary of statistics from plain-text file of Big Two scores
-################################################################
 
 def file_to_dict(file_name, start_date, end_date, fry_min):
+  """
+  Generate a dictionary of stats from a file of Big Two scores.
+  """
   
   ################################################################
   # For frying
@@ -245,7 +258,7 @@ def file_to_dict(file_name, start_date, end_date, fry_min):
   )
   
   # Import .txt file as string
-  with open(f'{file_name}.txt', 'r', encoding = 'utf-8') as txt_file:
+  with open(f'{file_name}.txt', 'r', encoding='utf-8') as txt_file:
     txt_file_string = txt_file.read()
   
   # Whether the start date has been reached
@@ -383,9 +396,6 @@ def file_to_dict(file_name, start_date, end_date, fry_min):
     
   return stats_dict
 
-################################################################
-# Main
-################################################################
 
 def main(args):
   
@@ -429,57 +439,55 @@ def main(args):
   stats_csv = dict_to_csv(stats_dict, separate_regular)
   
   # Export .csv file
-  with open(f'{file_name_export}.csv', 'w', encoding = 'utf-8') as csv_file:
+  with open(f'{file_name_export}.csv', 'w', encoding='utf-8') as csv_file:
     csv_file.write(stats_csv)
 
-################################################################
-# Argument parsing
-################################################################
 
 if __name__ == '__main__':
   
   # Description
   parser = argparse.ArgumentParser(
-    description = 'Generates Big Two statistics'
+    description='Generates Big Two statistics'
   )
   
   # Arguments
   parser.add_argument(
     'file_name',
-    help = 'File name of Big Two scores (.txt)'
+    help='File name of Big Two scores file.',
+    metavar='file_name[.[txt]]'
   )
   parser.add_argument(
     '-s',
     '--start',
-    dest = 'start_date',
-    help = f'Start date (default {DEFAULT_START_DATE})',
-    nargs = '?',
-    default = DEFAULT_START_DATE,
-    type = int
+    dest='start_date',
+    help=f'Start date (default {DEFAULT_START_DATE})',
+    nargs='?',
+    default=DEFAULT_START_DATE,
+    type=int
   )
   parser.add_argument(
     '-e',
     '--end',
-    dest = 'end_date',
-    help = f'End date (default {DEFAULT_END_DATE})',
-    nargs = '?',
-    default = DEFAULT_END_DATE,
-    type = int
+    dest='end_date',
+    help=f'End date (default {DEFAULT_END_DATE})',
+    nargs='?',
+    default=DEFAULT_END_DATE,
+    type=int
   )
   parser.add_argument(
     '-f',
     '--fry',
-    dest = 'fry_min',
-    help = f'Frying threshold (default {DEFAULT_FRY_MIN})',
-    nargs = '?',
-    default = DEFAULT_FRY_MIN,
-    type = int
+    dest='fry_min',
+    help=f'Frying threshold (default {DEFAULT_FRY_MIN})',
+    nargs='?',
+    default=DEFAULT_FRY_MIN,
+    type=int
   )
   parser.add_argument(
     '--sep',
-    dest = 'separate_regular',
-    action = 'store_true',
-    help = (
+    dest='separate_regular',
+    action='store_true',
+    help=(
       'Flag for displaying regular players '
       '(those who have played at least 1 in 4 games) separately'
     )
