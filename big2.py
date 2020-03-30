@@ -53,7 +53,6 @@ DEFAULT_END_DATE = 10 ** 8
 DEFAULT_FRY_MIN = 10
 
 
-
 def add_player(stats_dict, player):
   """
   Add a player to a dictionary of statistics.
@@ -68,7 +67,7 @@ def add_player(stats_dict, player):
 
 def stat_list_additive():
   """
-  Return list of the additive statistics (rates).
+  Return list of the additive statistics.
   """
   
   return [
@@ -81,7 +80,7 @@ def stat_list_additive():
 
 def stat_list_rates():
   """
-  Return list of the non-additive statistics.
+  Return list of the non-additive statistics (rates).
   """
   
   return [
