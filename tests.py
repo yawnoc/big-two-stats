@@ -1,9 +1,9 @@
-#!/usr/bin/python
+#!/usr/bin/env python3
 
 import subprocess
 
 def big_two_call(scores_file, args_list = []):
-  subprocess.call(['python', 'big2.py', scores_file] + args_list)
+  subprocess.call(['python3', 'big2.py', scores_file] + args_list)
 
 # For scores.txt
 big_two_call('scores')
