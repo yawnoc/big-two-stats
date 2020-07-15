@@ -2,6 +2,8 @@
 
 A scorer for Big Two, written in Python.
 
+Licensed under "MIT No Attribution" (MIT-0), see [LICENSE](LICENSE).
+
 ## Usage
 
 Parse the Big Two scores in `{scores file}.txt` and return a CSV of statistics:

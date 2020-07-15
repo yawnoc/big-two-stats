@@ -20,10 +20,6 @@ Optional argument -f or --fry for frying threshold (default 10):
 Optional flag --sep for displaying regular players separately:
   big2.py {...} --sep
 
-Released into the public domain (CC0):
-  <https://creativecommons.org/publicdomain/zero/1.0/>
-ABSOLUTELY NO WARRANTY, i.e. "GOD SAVE YOU"
-
 Specifications for plain-text file of Big Two scores:
 
 1. Hash (#) comments out the remainder of a line

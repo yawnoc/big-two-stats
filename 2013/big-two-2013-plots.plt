@@ -1,9 +1,5 @@
 # Plots for Big two scores from 2013, regular players only
 
-# Released into the public domain (CC0):
-#   https://creativecommons.org/publicdomain/zero/1.0/
-# ABSOLUTELY NO WARRANTY, i.e. "GOD SAVE YOU"
-
 # Works in gnuplot 5.0.7
 
 ################################################################
